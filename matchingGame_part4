@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Matching Game part1</title>
+    <style>
+      img{position: absolute;}
+      div{position: absolute;width: 500px; height: 500px;}
+      #rightSide{left: 500px;
+            border-left: 1px solid black}
+    </style>
+  </head>
+
+  <body onload = "generateFaces()">
+    <h1>Matching Game</h1>
+    <h3>Click on the extra smiling face on the left.</h3>
+    <div id="leftSide"></div>
+
+    <div id="rightSide"></div>
+
+    <script>
+      var theLeftSide;
+      var numberOfFaces = 5;
+      function generateFaces(){
+
+        theLeftSide = document.getElementById("leftSide");
+        for(var i = 0 ; i < numberOfFaces ; i ++){
+          var topPosition = Math.random() * 400 ;
+          topPosition = Math.floor(topPosition) + 1 ;
+          var leftPosition = Math.random() * 400 ;
+          leftPosition = Math.floor(leftPosition) + 1 ;
+          var smile = document.createElement("img");
+          smile.src = "http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png";
+          smile.style.top = topPosition + "px";
+          smile.style.left = leftPosition + "px";
+          theLeftSide.appendChild(smile);
+
+        }
+        generateLeftSide();
+        evenHandeler();
+      }
+
+      function generateLeftSide(){
+        var theRightSide = document.getElementById('rightSide');
+        var leftSideImages = theLeftSide.cloneNode(true);
+        leftSideImages.removeChild(leftSideImages.lastChild);
+        theRightSide.appendChild(leftSideImages);
+      }
+
+      function evenHandeler(){
+        var theBody = document.getElementsByTagName("body")[0];
+        theLeftSide.lastChild.onclick=
+          function nextLevel(event){
+            event.stopPropagation();
+            numberOfFaces += 5;
+            removeChildren("leftSide");
+            removeChildren("rightSide");
+            generateFaces();
+          };
+
+          theBody.onclick = function gameOver() {
+            alert("Game Over!");
+            theBody.onclick = null;
+            theLeftSide.lastChild.onclick = null;
+            };
+      }
+
+      function removeChildren(elementID){
+        var removingParent = document.getElementById(elementID);
+        while (removingParent.firstChild) {
+          removingParent.removeChild(removingParent.firstChild);
+        }
+      }
+
+    </script>
+
+
+
+  </body>
+</html>
